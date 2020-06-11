@@ -12,6 +12,7 @@ set(SOURCE
         AdsLib/Frame.cpp
         AdsLib/Log.cpp
         AdsLib/NotificationDispatcher.cpp
+        AdsLib/Sockets.cpp
         AdsLibOOI/AdsDevice.cpp
         AdsLibOOI/AdsNotification.cpp
         AdsLib/AdsDef.h
