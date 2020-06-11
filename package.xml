@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package>
+  <name>twincat_talker</name>
+  <version>1.0.0</version>
+  <description>ROS interface Beckhoff TwinCAT PLC</description>
+
+<maintainer email="roman.ehrler@hslu.ch">Roman Ehrler</maintainer>
+
+<license>MIT</license>
+
+<author email="roman.ehrler@hslu.ch">Roman Ehrler</author>
+
+<buildtool_depend>catkin</buildtool_depend>
+
+<build_depend>roscpp</build_depend>
+<build_depend>sensor_msgs</build_depend>
+
+<run_depend>roscpp</run_depend>
+<run_depend>sensor_msgs</run_depend>
+</package>

@@ -1,0 +1,27 @@
+cmake_minimum_required(VERSION 2.8.3)
+
+add_compile_options(-std=c++11)
+project(twincat_talker)
+
+find_package(catkin REQUIRED roscpp)
+
+catkin_package(
+    CATKIN_DEPENDS roscpp sensor_msgs
+)
+
+add_subdirectory(dep/ADS)
+
+include_directories(dep/ADS/AdsLib dep/ADS/AdsLibOOI ${catkin_INCLUDE_DIRS})
+
+add_executable(tctalker src/main.cc)
+
+target_link_libraries(tctalker
+    libadscxx
+    ${catkin_LIBRARIES}
+)
+
+install(TARGETS tctalker
+   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
