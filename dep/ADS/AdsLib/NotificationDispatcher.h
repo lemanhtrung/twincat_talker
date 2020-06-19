@@ -22,29 +22,31 @@
 
 #pragma once
 
-#include "AdsNotification.h"
-#include "AmsHeader.h"
-
 #include <functional>
 #include <map>
 #include <mutex>
 
-using DeleteNotificationCallback = std::function<long (uint32_t hNotify, uint32_t tmms)>;
+#include "AdsNotification.h"
+#include "AmsHeader.h"
+
+using DeleteNotificationCallback =
+    std::function<long(uint32_t hNotify, uint32_t tmms)>;
 
 struct NotificationDispatcher {
-    NotificationDispatcher(DeleteNotificationCallback callback);
-    void Emplace(uint32_t hNotify, std::shared_ptr<Notification> notification);
-    long Erase(uint32_t hNotify, uint32_t tmms);
-    void Notify();
-    void Run();
+  NotificationDispatcher(DeleteNotificationCallback callback);
+  void Emplace(uint32_t hNotify, std::shared_ptr<Notification> notification);
+  long Erase(uint32_t hNotify, uint32_t tmms);
+  void Notify();
+  void Run();
 
-    const DeleteNotificationCallback deleteNotification;
-    RingBuffer ring;
-private:
-    std::map<uint32_t, std::shared_ptr<Notification> > notifications;
-    std::recursive_mutex mutex;
-    std::mutex runLock;
+  const DeleteNotificationCallback deleteNotification;
+  RingBuffer ring;
 
-    std::shared_ptr<Notification> Find(uint32_t hNotify);
+ private:
+  std::map<uint32_t, std::shared_ptr<Notification> > notifications;
+  std::recursive_mutex mutex;
+  std::mutex runLock;
+
+  std::shared_ptr<Notification> Find(uint32_t hNotify);
 };
 using SharedDispatcher = std::shared_ptr<NotificationDispatcher>;
