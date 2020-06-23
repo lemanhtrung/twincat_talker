@@ -33,14 +33,17 @@ void sendDataToSps()
 {
   if (!initialized)
   {
-    reference = tfMsgs[0];
+    reference = tfMsgs[10];
     initialized = true;
     ROS_INFO_STREAM("System is initialized. Go on with new movement");
   }
   else
   {
+    ROS_INFO_STREAM("Reference: " << reference.translation.x << "," << reference.translation.y << "," << reference.translation.z << std::endl;);
     geometry_msgs::Transform pickMsg = tfMsgs[5];
-    geometry_msgs::Transform placeMsg = tfMsgs[-5];
+    geometry_msgs::Transform placeMsg = tfMsgs.back();
+ROS_INFO_STREAM("Pick: " << pickMsg.translation.x << "," << pickMsg.translation.y << "," << pickMsg.translation.z << std::endl;);
+ROS_INFO_STREAM("Place: " << placeMsg.translation.x << "," << placeMsg.translation.y << "," << placeMsg.translation.z << std::endl;);
 
     pickMsg.translation.x = pickMsg.translation.x - reference.translation.x;
     placeMsg.translation.x = placeMsg.translation.x - reference.translation.x;
@@ -49,15 +52,15 @@ void sendDataToSps()
     pickMsg.translation.z = pickMsg.translation.z - reference.translation.z;
     placeMsg.translation.z = placeMsg.translation.z - reference.translation.z;
 
-    x_pick = pickMsg.translation.x;
-    y_pick = pickMsg.translation.y;
-    z_pick = pickMsg.translation.z;
+    x_pick = round(100*1000*pickMsg.translation.x)/100;
+    y_pick = round(100*1000*pickMsg.translation.y)/100;
+    z_pick = round(100*1000*pickMsg.translation.z)/100;
 
-    x_pick = placeMsg.translation.x;
-    y_pick = placeMsg.translation.y;
-    z_pick = placeMsg.translation.z;
+    x_place = round(100*1000*placeMsg.translation.x)/100;
+    y_place = round(100*1000*placeMsg.translation.y)/100;
+    z_place = round(100*1000*placeMsg.translation.z)/100;
 
-    control = true;
+    control = false;
 
     ROS_INFO_STREAM("Data sent successfully to SPS!");
   }
