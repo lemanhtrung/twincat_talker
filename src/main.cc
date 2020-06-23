@@ -52,13 +52,15 @@ ROS_INFO_STREAM("Place: " << placeMsg.translation.x << "," << placeMsg.translati
     pickMsg.translation.z = pickMsg.translation.z - reference.translation.z;
     placeMsg.translation.z = placeMsg.translation.z - reference.translation.z;
 
-    x_pick = round(100*1000*pickMsg.translation.x)/100;
-    y_pick = round(100*1000*pickMsg.translation.y)/100;
-    z_pick = round(100*1000*pickMsg.translation.z)/100;
+    x_pick = -round(100*1000*pickMsg.translation.y)/100;
+    y_pick = -round(100*1000*pickMsg.translation.x)/100;
+    // z_pick = round(100*1000*pickMsg.translation.z)/100;
+    z_pick = 0.0;
 
-    x_place = round(100*1000*placeMsg.translation.x)/100;
-    y_place = round(100*1000*placeMsg.translation.y)/100;
-    z_place = round(100*1000*placeMsg.translation.z)/100;
+    x_place = -round(100*1000*placeMsg.translation.y)/100;
+    y_place = -round(100*1000*placeMsg.translation.x)/100;
+    // z_place = round(100*1000*placeMsg.translation.z)/100;
+    z_place = 0.0;
 
     control = false;
 
