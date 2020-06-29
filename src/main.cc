@@ -120,9 +120,32 @@ void sendToSps()
   // z_place = round(100*1000*placeMsg.translation.z)/100;
   z_place = 0.0;
 
+  // rotation
+
+  Eigen::Matrix3d refRot = quat2Rot(reference.rotation);
+
+  // pick
+  Eigen::Matrix3d pickMsgRot = quat2Rot(pickMsg.rotation);
+  Eigen::Matrix3d pickDiffRot = refRot.transpose() * pickMsgRot;
+  Eigen::Vector3d pickEuler = rot2Euler(pickDiffRot);
+  pickEuler(0) = 0;     // + euler(0);
+  pickEuler(1) = -180;  // + euler(1);
+  pickEuler(2) = 0 - pickEuler(2);
+
+  // pick
+  Eigen::Matrix3d placeMsgRot = quat2Rot(placeMsg.rotation);
+  Eigen::Matrix3d placeDiffRot = refRot.transpose() * placeMsgRot;
+  Eigen::Vector3d placeEuler = rot2Euler(placeDiffRot);
+  placeEuler(0) = 0;     // + euler(0);
+  placeEuler(1) = -180;  // + euler(1);
+  placeEuler(2) = 0 - placeEuler(2);
+
+  c_pick = -round(100 * pickEuler(2)) / 100;
+  c_place = -round(100 * placeEuler(2)) / 100;
+
   control = false;
 
-  ROS_INFO_STREAM("Data sent successfully to SPS!");
+  ROS_INFO_STREAM("Successfully sent data to SPS!");
 }
 
 void writeToFile()
@@ -134,7 +157,7 @@ void writeToFile()
   std::ofstream file;
   file.open(file_name);
   file << "# RoboBahn[i]={{x,y,z,-180+a,0+b,-180+c},{sfree,efree,wfree}}" << std::endl;
-  ROS_INFO_STREAM(tfMsgs.size() << " points to send."); 
+  ROS_INFO_STREAM(tfMsgs.size() << " points to send.");
   for (int idx = 0; idx < tfMsgs.size(); ++idx)
   {
     geometry_msgs::Transform tfMsg = tfMsgs[idx];
@@ -155,18 +178,18 @@ void writeToFile()
     euler = rot2Euler(diffRot);
 
     // correction of angles
-    euler(0) = 0; // + euler(0);
-    euler(1) = -180; // + euler(1);
+    euler(0) = 0;     // + euler(0);
+    euler(1) = -180;  // + euler(1);
     euler(2) = 0 - euler(2);
 
     // write to file
-    file << "RoboBahn[" << idx << "]={{" << -transl(1) << "," << -transl(0) << "," << -transl(2) << "," << euler(0) << ","
-         << euler(1) << "," << euler(2) << "},{sfree,efree,wfree}}" << std::endl;
+    file << "RoboBahn[" << idx << "]={{" << -transl(1) << "," << -transl(0) << "," << -transl(2) << "," << euler(0)
+         << "," << euler(1) << "," << euler(2) << "},{sfree,efree,wfree}}" << std::endl;
   }
 
   file.close();
 
-  ROS_INFO_STREAM("Data written so file!");
+  ROS_INFO_STREAM("Successfully wrote data to file!");
 }
 
 void sendDataToSps()
