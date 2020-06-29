@@ -134,7 +134,7 @@ void writeToFile()
   std::ofstream file;
   file.open(file_name);
   file << "# RoboBahn[i]={{x,y,z,-180+a,0+b,-180+c},{sfree,efree,wfree}}" << std::endl;
-
+  ROS_INFO_STREAM(tfMsgs.size() << " points to send."); 
   for (int idx = 0; idx < tfMsgs.size(); ++idx)
   {
     geometry_msgs::Transform tfMsg = tfMsgs[idx];
@@ -155,16 +155,18 @@ void writeToFile()
     euler = rot2Euler(diffRot);
 
     // correction of angles
-    euler(0) = -180 + euler(0);
-    euler(1) = 0 + euler(1);
-    euler(2) = -180 + euler(2);
+    euler(0) = 0; // + euler(0);
+    euler(1) = -180; // + euler(1);
+    euler(2) = 0 - euler(2);
 
     // write to file
-    file << "RoboBahn[" << idx << "]={{" << transl(0) << "," << transl(1) << "," << transl(2) << "," << euler(0) << ","
+    file << "RoboBahn[" << idx << "]={{" << -transl(1) << "," << -transl(0) << "," << -transl(2) << "," << euler(0) << ","
          << euler(1) << "," << euler(2) << "},{sfree,efree,wfree}}" << std::endl;
   }
 
   file.close();
+
+  ROS_INFO_STREAM("Data written so file!");
 }
 
 void sendDataToSps()
@@ -219,8 +221,8 @@ int main(int argc, char *argv[])
     myBool = *boolMsg.get();
   };
 
-  ros::Subscriber tfSub = n.subscribe("tf", 100, tfCallback);
-  ros::Subscriber boolSub = n.subscribe("keyboard/bool", 100, boolCallback);
+  ros::Subscriber tfSub = n.subscribe("tf", 1, tfCallback);
+  ros::Subscriber boolSub = n.subscribe("keyboard/bool", 1, boolCallback);
 
   ros::spin();
 
