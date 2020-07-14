@@ -13,14 +13,14 @@ add_subdirectory(dep/ADS)
 
 include_directories(dep/ADS/AdsLib dep/ADS/AdsLibOOI ${catkin_INCLUDE_DIRS})
 
-add_executable(tctalker src/main.cc)
+add_executable(twincat_talker src/main.cc)
 
-target_link_libraries(tctalker
+target_link_libraries(twincat_talker
     libadscxx
     ${catkin_LIBRARIES}
 )
 
-install(TARGETS tctalker
+install(TARGETS twincat_talker
    ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

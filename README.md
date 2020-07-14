@@ -12,12 +12,12 @@ For further information:
 
 ## Installation
 
-Clone the project into your catkin_ws/src \
-`git clone https://github.com/hslu-c2a/tctalker.git` \
+Clone the project into your `catkin_ws/src` \
+`git clone https://github.com/hslu-c2a/twincat_talker.git` \
 Build the project \
 `catkin_make` \
 Start a roscore and in a separate shell \
-`source devel/bash.setup && rosrun twincat_talker tctalker`
+`source devel/bash.setup && rosrun twincat_talker twincat_talker`
 
 ## Usage
 
