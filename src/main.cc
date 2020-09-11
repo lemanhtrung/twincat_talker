@@ -2,6 +2,7 @@
 #include "AdsNotification.h"
 #include "AdsVariable.h"
 #include "ros/ros.h"
+#include "std_msgs/Float32.h"
 
 int main(int argc, char *argv[]) {
   // ROS node init
@@ -30,20 +31,23 @@ int main(int argc, char *argv[]) {
   n.getParam("/twincat_talker/variable", plc_variable);
   ROS_INFO_STREAM("variable to write on plc: " << plc_variable);
 
+  std::string ros_topic;
+  n.getParam("/twincat_talker/topic", ros_topic);
+  ROS_INFO_STREAM("topic to listen on ros: " << ros_topic);
+
   ROS_INFO_STREAM("running good");
 
   AdsDevice route{remoteIpV4, remoteNetId, AMSPORT_R0_PLC_TC3};
 
-  AdsVariable<double> variable_to_write{route, plc_variable};
+  AdsVariable<float> variable_to_write{route, plc_variable};
 
-  ros::Rate loop_rate(0.1);
+  boost::function<void(const std_msgs::Float32::ConstPtr &)> topic_callback =
+      [&](const std_msgs::Float32::ConstPtr topic_msg) {
+        variable_to_write = topic_msg->data;
+        ROS_INFO_STREAM("test value: " << topic_msg->data);
+      };
 
-  while (ros::ok()) {
-    variable_to_write = 12.0;
-    ROS_INFO_STREAM("changed variable on sps");
-    ros::spinOnce();
-    loop_rate.sleep();
-  }
+  n.subscribe(ros_topic, 1, topic_callback);
 
   return 0;
 }
