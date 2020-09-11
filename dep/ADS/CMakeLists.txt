@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.4)
-project(libadscxx CXX)
+project(adscxx CXX)
 
 set(CMAKE_SUPPRESS_REGENERATION TRUE)
 
@@ -35,14 +35,14 @@ set(SOURCE
         AdsLibOOI/AdsNotificationOOI.h
         AdsLibOOI/AdsVariable.h)
 
-add_library(libadscxx ${SOURCE})
+add_library(adscxx ${SOURCE})
 
 include_directories(
     AdsLib
     AdsLibOOI
 )
 
-install(TARGETS libadscxx
+install(TARGETS adscxx
     ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
     LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
     RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

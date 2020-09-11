@@ -8,14 +8,33 @@ int main(int argc, char *argv[]) {
   ros::init(argc, argv, "tctalker");
   ros::NodeHandle n;
 
-  ROS_INFO_STREAM("running good");
+  // load parameters
 
-  static const AmsNetId remoteNetId{5, 67, 39, 56, 1, 1};
-  static const char remoteIpV4[] = "10.180.30.49";
+  std::string ip_address;
+  n.getParam("/twincat_talker/ip_address", ip_address);
+  char remoteIpV4[ip_address.size() + 1];
+  strcpy(remoteIpV4, ip_address.c_str());
+  ROS_INFO_STREAM("ip address of target: " << ip_address);
+
+  std::vector<int> remote_net_id;
+  n.getParam("/twincat_talker/remoteNetId", remote_net_id);
+  static const AmsNetId remoteNetId{remote_net_id.at(0), remote_net_id.at(1),
+                                    remote_net_id.at(2), remote_net_id.at(3),
+                                    remote_net_id.at(4), remote_net_id.at(5)};
+  ROS_INFO_STREAM("remote net id of target: "
+                  << remote_net_id.at(0) << "," << remote_net_id.at(1) << ","
+                  << remote_net_id.at(2) << "," << remote_net_id.at(3) << ","
+                  << remote_net_id.at(4) << "," << remote_net_id.at(5));
+
+  std::string plc_variable;
+  n.getParam("/twincat_talker/variable", plc_variable);
+  ROS_INFO_STREAM("variable to write on plc: " << plc_variable);
+
+  ROS_INFO_STREAM("running good");
 
   AdsDevice route{remoteIpV4, remoteNetId, AMSPORT_R0_PLC_TC3};
 
-  AdsVariable<double> variable_to_write{route, "MAIN.myFloatVAR"};
+  AdsVariable<double> variable_to_write{route, plc_variable};
 
   ros::Rate loop_rate(0.1);
 

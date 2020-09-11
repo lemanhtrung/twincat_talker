@@ -21,15 +21,7 @@ Start a roscore and in a separate shell \
 
 ## Usage
 
-Change the AmsNetId in the main.cc to the one observed on your PLC \
-`static const AmsNetId remoteNetId{x, x, x, x, x, x};` \
-Change the remoteIpV4 in the main.cc to the IP of the PLC \
-`static const remoteIpV4[] = "x.x.x.x";` \
-Setup the ADS device with the create variables above and the correct port at the end \
-`AdsDevice route{remoteIpV4, remoteNetId, AMSPORT_R0_PLC_TC3};`
-\
-Add an AdsVariable you want to change with the name NAME \
-`AdsVariable<double> variable_to_write{route, "NAME"}` \
+Set the correct parameters the [parameter file](config/plc.yaml) \
 Now you can overwrite the variable with the desired value \
 `variable_to_write = 12.0;`
 

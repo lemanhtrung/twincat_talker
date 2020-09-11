@@ -1,0 +1,5 @@
+/twincat_talker/ip_address: "10.180.30.49"
+
+/twincat_talker/remoteNetId: [5, 67, 39, 56, 1, 1]
+
+/twincat_talker/variable: "MAIN.myFloatVAR"

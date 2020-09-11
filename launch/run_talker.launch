@@ -1,0 +1,5 @@
+<launch>
+    <rosparam file="$(find twincat_talker)/config/plc.yaml" />
+
+    <node name="twincat_talker" pkg="twincat_talker" type="twincat_talker" />
+</launch>
